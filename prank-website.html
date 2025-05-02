@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Course Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+        .subjects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        .subject-card {
+            width: 220px;
+            padding: 1rem;
+            margin: 1rem;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover {
+            transform: scale(1.05);
+            background-color: #2980b9;
+        }
+        .hidden {
+            display: none;
+        }
+        .prank-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 2rem;
+            border-radius: 8px;
+        }
+        .serious-mode {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>College Course Materials</h1>
+            <p>Essential resources for your academic semester</p>
+        </header>
+
+        <div class="content" id="study-content">
+            <h2>Welcome to our Learning Platform</h2>
+            <p>Access high-quality educational resources to boost your academic performance.</p>
+            <p>Choose your subject below to begin studying:</p>
+
+            <div class="subjects">
+                <div class="subject-card" onclick="activatePrank()">Media Literacy</div>
+                <div class="subject-card" onclick="activatePrank()">Emerging Technology and Application</div>
+                <div class="subject-card" onclick="activatePrank()">OB (Organizational Behavior)</div>
+                <div class="subject-card" onclick="activatePrank()">Marketing</div>
+                <div class="subject-card" onclick="activatePrank()">Economics</div>
+                <div class="subject-card" onclick="activatePrank()">Indian Constitution</div>
+            </div>
+        </div>
+
+        <div class="content hidden" id="prank-content">
+            <img src="/api/placeholder/600/400" alt="Monkey Pooping" class="prank-image" id="monkey-image">
+            <h2>GOTCHA! 😂</h2>
+            <p>This is a prank website! Hope you didn't have your volume up too loud...</p>
+        </div>
+
+        <button class="serious-mode" id="stop-button">Stop Sounds</button>
+        <audio id="fartAudio1" preload="auto" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFpgDMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAZHAAAAAAAABaY3OeKiAAAAAAD/+xDEAAAHUAF59AAAIhggML7w0gAwAAAA0NEpHkNI6wMD9SMMHh4eHj/s0K5jyef//+g0H////////g0Wi0XOgwQ6H/4JGQdjIYIGCBg0w7JmPMRmNJDH//yGPx+Puxj////////+4AAABNQ3V0ZSBGYXQgRmFydAAA" style="display: none;"></audio>
+        <audio id="fartAudio2" preload="auto" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFpgDMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAZHAAAAAAAABaY3OeKiAAAAAAD/+xDEAAAHUAF59AAAIhggMzzw0gAwAAAA0NEpHkNNyQeHh4eJGPJDG8MMei0Xl2P////7smk8gYND9AYHh+NJ5AwQMGmRhgZtMwZT////////////+Lr//KyGQyGQ0G5QaeHAAAAAA" style="display: none;"></audio>
+
+        <footer>
+            <p>&copy; 2025 College Course Materials Portal</p>
+        </footer>
+    </div>
+
+    <script>
+        // Improved fart sound generation
+        let audioContext;
+        let isPlaying = false;
+        let currentTimeout;
+        
+        // Create a better fart sound using the Web Audio API
+        function createFartSound() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Create multiple oscillators for a more complex sound
+            const oscillator1 = audioContext.createOscillator();
+            const oscillator2 = audioContext.createOscillator();
+            const oscillator3 = audioContext.createOscillator();
+            
+            // Create a gain node for volume control
+            const gainNode = audioContext.createGain();
+            
+            // Random duration between 0.3 and 1.5 seconds
+            const duration = Math.random() * 1.2 + 0.3;
+            
+            // Configure oscillators for a fart-like sound
+            oscillator1.type = 'sawtooth';
+            oscillator1.frequency.setValueAtTime(150, audioContext.currentTime);
+            oscillator1.frequency.exponentialRampToValueAtTime(40, audioContext.currentTime + duration);
+            
+            oscillator2.type = 'sine';
+            oscillator2.frequency.setValueAtTime(60, audioContext.currentTime);
+            oscillator2.frequency.exponentialRampToValueAtTime(30, audioContext.currentTime + duration);
+            
+            oscillator3.type = 'triangle';
+            oscillator3.frequency.setValueAtTime(220, audioContext.currentTime);
+            oscillator3.frequency.exponentialRampToValueAtTime(180, audioContext.currentTime + duration);
+            
+            // Set up gain envelope
+            gainNode.gain.setValueAtTime(0.01, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.5, audioContext.currentTime + 0.05);
+            
+            // Add random variations to make it sound more natural
+            const numVibrations = Math.floor(Math.random() * 6) + 3;
+            const vibrationTime = duration / numVibrations;
+            
+            for (let i = 0; i < numVibrations; i++) {
+                const time = audioContext.currentTime + (i * vibrationTime);
+                const targetGain = 0.5 - (i * (0.5 / numVibrations));
+                
+                // Add a slight pause between "bubbles"
+                gainNode.gain.setValueAtTime(targetGain * 0.3, time);
+                gainNode.gain.exponentialRampToValueAtTime(targetGain, time + (vibrationTime * 0.3));
+            }
+            
+            // Final decay
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            // Connect everything
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            oscillator3.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Start and stop the oscillators
+            oscillator1.start();
+            oscillator2.start();
+            oscillator3.start();
+            
+            oscillator1.stop(audioContext.currentTime + duration);
+            oscillator2.stop(audioContext.currentTime + duration);
+            oscillator3.stop(audioContext.currentTime + duration);
+            
+            return duration;
+        }
+        
+        // Function to play a series of fart sounds
+        function playFartSounds() {
+            if (!isPlaying) return;
+            
+            // Create a fart sound and get its duration
+            const soundDuration = createFartSound();
+            
+            // Schedule the next fart sound with a random delay
+            const nextDelay = (soundDuration * 1000) + (Math.random() * 900) + 100;
+            currentTimeout = setTimeout(playFartSounds, nextDelay);
+        }
+        
+        // Function to stop all fart sounds
+        function stopFartSounds() {
+            isPlaying = false;
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
+            }
+            
+            // If audioContext exists, create a short fade out to avoid clicks
+            if (audioContext) {
+                const finalGain = audioContext.createGain();
+                finalGain.gain.setValueAtTime(1, audioContext.currentTime);
+                finalGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                finalGain.connect(audioContext.destination);
+                setTimeout(() => {
+                    finalGain.disconnect();
+                }, 500);
+            }
+        }
+        
+        // Create a simple animated monkey pooping for the prank
+        function createMonkeyImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw monkey
+            ctx.fillStyle = 'brown';
+            ctx.beginPath();
+            ctx.arc(300, 200, 80, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Face
+            ctx.fillStyle = 'beige';
+            ctx.beginPath();
+            ctx.arc(300, 210, 50, 0, Math.PI);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(270, 180, 10, 0, Math.PI * 2);
+            ctx.arc(330, 180, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Poop animation
+            let poopY = 280;
+            let poopSize = 10;
+            
+            function animatePoop() {
+                // Clear poop area
+                ctx.clearRect(270, 260, 60, 140);
+                
+                // Draw tail
+                ctx.fillStyle = 'brown';
+                ctx.beginPath();
+                ctx.moveTo(350, 230);
+                ctx.quadraticCurveTo(380, 210, 400, 250);
+                ctx.quadraticCurveTo(380, 230, 350, 230);
+                ctx.fill();
+                
+                // Draw poop
+                ctx.fillStyle = '#5d4037';
+                ctx.beginPath();
+                ctx.arc(300, poopY, poopSize, 0, Math.PI * 2);
+                ctx.fill();
+                
+                poopY += 3;
+                poopSize = Math.min(poopSize + 0.5, 30);
+                
+                if (poopY < 390) {
+                    requestAnimationFrame(animatePoop);
+                }
+            }
+            
+            animatePoop();
+            
+            // Replace the placeholder image with our canvas
+            const img = document.getElementById('monkey-image');
+            img.src = canvas.toDataURL();
+        }
+        
+        function activatePrank() {
+            // Hide study content, show prank content
+            document.getElementById('study-content').classList.add('hidden');
+            document.getElementById('prank-content').classList.remove('hidden');
+            document.getElementById('stop-button').style.display = 'block';
+            
+            // Start playing fart sounds - must be triggered by user interaction
+            try {
+                // Initialize audio context if needed (must be done within user gesture)
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                // Prompt audio context to resume if it's suspended (browsers sometimes require this)
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                isPlaying = true;
+                playFartSounds();
+                
+                // Play the backup audio files for more guaranteed sound
+                const fartAudio1 = document.getElementById('fartAudio1');
+                const fartAudio2 = document.getElementById('fartAudio2');
+                
+                // Play first audio
+                fartAudio1.volume = 0.8;
+                fartAudio1.play().catch(e => console.log('Audio 1 playback failed:', e));
+                
+                // Set up looping audio pattern
+                fartAudio1.onended = function() {
+                    setTimeout(() => {
+                        if (isPlaying) {
+                            fartAudio2.play().catch(e => console.log('Audio 2 playback failed:', e));
+                        }
+                    }, 500);
+                };
+                
+                fartAudio2.onended = function() {
+                    setTimeout(() => {
+                        if (isPlaying) {
+                            fartAudio1.play().catch(e => console.log('Audio 1 playback failed:', e));
+                        }
+                    }, 800);
+                };
+                
+                console.log('Sound playback initialized!');
+            } catch (e) {
+                console.error('Failed to play sound:', e);
+            }
+            
+            // Create and animate the monkey image
+            createMonkeyImage();
+        }
+        
+        // Add event listener to stop button
+        document.getElementById('stop-button').addEventListener('click', function() {
+            // Stop Web Audio API sounds
+            stopFartSounds();
+            
+            // Stop backup audio elements
+            const fartAudio1 = document.getElementById('fartAudio1');
+            const fartAudio2 = document.getElementById('fartAudio2');
+            fartAudio1.pause();
+            fartAudio2.pause();
+            fartAudio1.currentTime = 0;
+            fartAudio2.currentTime = 0;
+            
+            this.textContent = 'Sounds Stopped';
+            setTimeout(() => {
+                this.style.display = 'none';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
